@@ -94,10 +94,12 @@ Storage:
 2. Setup backend
 
 - cd server
-- npm installCreate .env file:
+- npm install
+- Create .env file:
   OPENAI_API_KEY=your_api_key_here
-  PORT=4000Start backend:
-  npm run dev
+  PORT=4000
+- Start backend:
+- npm run dev
 
 3. Load Chrome Extension
 
