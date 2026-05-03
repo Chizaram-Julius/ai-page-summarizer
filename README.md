@@ -96,7 +96,9 @@ Storage:
 - cd server
 - npm install
 - Create .env file:
+
   OPENAI_API_KEY=your_api_key_here
+  
   PORT=4000
 - Start backend:
 - npm run dev
