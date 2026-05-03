@@ -147,7 +147,7 @@ ai-page-summarizer/
 
 ## Demo Video
 
-[Paste your video link here]
+https://drive.google.com/file/d/1M8V1IzC7NAzwgv01fpzflrOunOyc5Nwo/view?usp=sharing
 
 ## HNG Stage 4A Compliance
 
