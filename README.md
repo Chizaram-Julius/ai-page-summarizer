@@ -145,10 +145,6 @@ ai-page-summarizer/
 - No exposed API keys
 - No console errors
 
-## Demo Video
-
-https://drive.google.com/file/d/1M8V1IzC7NAzwgv01fpzflrOunOyc5Nwo/view?usp=sharing
-
 ## HNG Stage 4A Compliance
 
 This project satisfies:
