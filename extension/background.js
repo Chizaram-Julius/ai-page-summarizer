@@ -38,51 +38,64 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   summarizePage(message.payload)
     .then(sendResponse)
-    .catch(() => {
+    .catch((error) => {
+      console.error("Message handling error:", error);
+
       sendResponse({
         success: false,
         error: "Unexpected background service worker error.",
       });
     });
 
-  return true;
+  return true; // Required for async response
 });
 
 async function summarizePage(pageData) {
-  const cachedSummary = await getCachedSummary(pageData.url);
+  try {
+    const cachedSummary = await getCachedSummary(pageData.url);
 
-  if (cachedSummary) {
+    if (cachedSummary) {
+      return {
+        success: true,
+        cached: true,
+        data: cachedSummary,
+      };
+    }
+
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pageData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+
+      return {
+        success: false,
+        error:
+          errorData?.error ||
+          `Backend request failed with status ${response.status}`,
+      };
+    }
+
+    const summary = await response.json();
+
+    await saveCachedSummary(pageData.url, summary);
+
     return {
       success: true,
-      cached: true,
-      data: cachedSummary,
+      cached: false,
+      data: summary,
     };
-  }
-
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(pageData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
+  } catch (error) {
+    console.error("Background service worker error:", error);
 
     return {
       success: false,
-      error: errorData?.error || "The AI server failed to summarize this page.",
+      error: "Unexpected background service worker error.",
     };
   }
-
-  const summary = await response.json();
-
-  await saveCachedSummary(pageData.url, summary);
-
-  return {
-    success: true,
-    cached: false,
-    data: summary,
-  };
 }
